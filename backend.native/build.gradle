@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.VersionGenerator
+
 /*
  * Copyright 2010-2018 JetBrains s.r.o.
  *
@@ -39,6 +41,7 @@ allprojects {
         maven { url kotlinCompilerRepo }
     }
 }
+task compilerVersionGeneration(type: VersionGenerator){}
 
 sourceSets {
     compiler {
@@ -49,6 +52,7 @@ sourceSets {
         }
         kotlin {
             srcDir 'compiler/ir/backend.native/src/'
+            srcDir compilerVersionGeneration.versionSourceDirectory
         }
         resources.srcDir 'compiler/ir/backend.native/resources/'
     }
@@ -62,11 +66,13 @@ sourceSets {
     }
 }
 
+
 compileCompilerKotlin {
     dependsOn('renamePackage')
     // The protobuf plugin specifies this dependency for java by itself,
     // but not for Kotlin.
     dependsOn('generateCompilerProto')
+    dependsOn('compilerVersionGeneration')
 }
 
 compileCompilerJava {

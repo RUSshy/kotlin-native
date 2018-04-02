@@ -24,7 +24,7 @@ open class VersionGenerator: DefaultTask() {
                 val major = version[0].toInt()
                 val minor = version[1].toInt()
                 val maintenance = if (version.size > 2) version[2].toInt() else 0
-                val build = System.getenv("BUILD_NUMBER")?.toInt() ?: -1
+                val build = System.getenv("env.build.counter")?.toInt() ?: -1
                 val meta = project.properties["konanMetaVersion"]?.let { "MetaVersion.${it.toString().toUpperCase()}" }
 
                 + """|package org.jetbrains.kotlin.backend.konan

@@ -41,7 +41,7 @@ allprojects {
         maven { url kotlinCompilerRepo }
     }
 }
-task compilerVersionGeneration(type: VersionGenerator){}
+task generateCompilerVersion(type: VersionGenerator){}
 
 sourceSets {
     compiler {
@@ -52,7 +52,7 @@ sourceSets {
         }
         kotlin {
             srcDir 'compiler/ir/backend.native/src/'
-            srcDir compilerVersionGeneration.versionSourceDirectory
+            srcDir generateCompilerVersion.versionSourceDirectory
         }
         resources.srcDir 'compiler/ir/backend.native/resources/'
     }
@@ -72,7 +72,7 @@ compileCompilerKotlin {
     // The protobuf plugin specifies this dependency for java by itself,
     // but not for Kotlin.
     dependsOn('generateCompilerProto')
-    dependsOn('compilerVersionGeneration')
+    dependsOn('generateCompilerVersion')
 }
 
 compileCompilerJava {

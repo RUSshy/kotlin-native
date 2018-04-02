@@ -27,13 +27,20 @@ open class VersionGenerator: DefaultTask() {
                 val build = System.getenv("BUILD_NUMBER")?.toInt() ?: -1
                 val meta = project.properties["konanMetaVersion"]?.let { "MetaVersion.${it.toString().toUpperCase()}" }
 
-                +""" package org.jetbrains.kotlin.backend.konan
-             class KonanVersion(val meta: MetaVersion?, val major: Int, val minor: Int, val maintenance: Int, val build:Int) {
-                 companion object {
-                     val CURRENT = KonanVersion($meta, $major, $minor, $maintenance, $build)
-                 }
-                 override fun toString() = if (meta != null) "${'$'}meta ${'$'}major.${'$'}minor.${'$'}maintenance-${'$'}build" else "${'$'}major.${'$'}minor.${'$'}maintenance-${'$'}build"
-             }
+                + """|package org.jetbrains.kotlin.backend.konan
+                     |class KonanVersion(val meta: MetaVersion?,
+                     |                   val major: Int,
+                     |                   val minor: Int,
+                     |                   val maintenance: Int,
+                     |                   val build:Int) {
+                 |  companion object {
+                 |     val CURRENT = KonanVersion($meta, $major, $minor, $maintenance, $build)
+                 |  }
+                 |  private val versionString by lazy {
+                 |     "${'$'}{meta?.name} ${'$'}major.${'$'}minor.${'$'}maintenance-${'$'}build".trim()
+                 |  }
+                 |  override fun toString() = versionString
+            |}
             """.trimMargin()
             }
             versionFile.printWriter().use {

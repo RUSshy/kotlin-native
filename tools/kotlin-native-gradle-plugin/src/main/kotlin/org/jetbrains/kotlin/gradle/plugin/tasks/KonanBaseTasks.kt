@@ -114,6 +114,10 @@ abstract class KonanArtifactTask: KonanTargetableTask(), KonanArtifactSpec {
         }
     }
 
+    fun dependencies(closure: Closure<Unit>) {
+        if (konanTarget in project.konanTargets)
+            project.dependencies(closure)
+    }
     // DSL.
 
     override fun artifactName(name: String) {
